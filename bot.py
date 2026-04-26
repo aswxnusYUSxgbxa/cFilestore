@@ -23,7 +23,8 @@ class Bot(Client):
                 "root": "plugins"
             },
             workers=workers,
-            bot_token=token
+            bot_token=token,
+            in_memory=True
         )
         self.LOGGER = LOGGER
         self.name = session
