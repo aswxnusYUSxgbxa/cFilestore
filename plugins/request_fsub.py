@@ -132,8 +132,8 @@ async def add_force_sub(client: Client, message: Message):
 
     try:
         chat = await client.get_chat(chat_id)
-        if chat.type not in [ChatType.CHANNEL, ChatType.SUPERGROUP]:
-            return await temp.edit("❌ Only channels/supergroups allowed.")
+        if chat.type not in [ChatType.CHANNEL, ChatType.SUPERGROUP, ChatType.GROUP]:
+            return await temp.edit("❌ Only channels/supergroups/groups allowed.")
 
         bot_member = await client.get_chat_member(chat.id, "me")
         if bot_member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
@@ -260,7 +260,8 @@ async def delete_requested_users(client, message: Message):
             if member.status in (
                 ChatMemberStatus.MEMBER,
                 ChatMemberStatus.ADMINISTRATOR,
-                ChatMemberStatus.OWNER
+                ChatMemberStatus.OWNER,
+                ChatMemberStatus.RESTRICTED
             ):
                 skipped += 1  # Still a participant, and in req list
                 continue

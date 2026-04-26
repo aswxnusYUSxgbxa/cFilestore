@@ -88,11 +88,20 @@ async def is_sub(client, user_id, channel_id):
         member = await client.get_chat_member(channel_id, user_id)
         status = member.status
         #print(f"[SUB] User {user_id} in {channel_id} with status {status}")
-        return status in {
+        if status in {
             ChatMemberStatus.OWNER,
             ChatMemberStatus.ADMINISTRATOR,
-            ChatMemberStatus.MEMBER
-        }
+            ChatMemberStatus.MEMBER,
+            ChatMemberStatus.RESTRICTED
+        }:
+            return True
+
+        mode = await db.get_channel_mode(channel_id)
+        if mode == "on":
+            exists = await db.req_user_exist(channel_id, user_id)
+            return exists
+
+        return False
 
     except UserNotParticipant:
         mode = await db.get_channel_mode(channel_id)
